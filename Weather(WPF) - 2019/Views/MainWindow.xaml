@@ -1,0 +1,487 @@
+﻿<Window x:Class="Weather.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Weather.Views"
+        xmlns:viewmodel="clr-namespace:Weather.ViewModel"
+        xmlns:cpb="clr-namespace:Weather"
+        mc:Ignorable="d"
+         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        Title="MainWindow" MinWidth="270" MinHeight="300" Height="450" Width="850" TextBlock.Foreground="White" TextBlock.FontSize="18">
+    <Window.DataContext>
+        <viewmodel:MainViewModel/>
+    </Window.DataContext>
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Elements/Resoruces/styles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <SolidColorBrush x:Key="StandardBorderBrush" Color="#888" />
+            <SolidColorBrush x:Key="StandardBackgroundBrush" Color="Black" />
+            <SolidColorBrush x:Key="HoverBorderBrush" Color="#DDD" />
+            <SolidColorBrush x:Key="SelectedBackgroundBrush" Color="Gray" />
+            <SolidColorBrush x:Key="SelectedForegroundBrush" Color="White" />
+            <SolidColorBrush x:Key="DisabledForegroundBrush" Color="#888" />
+            <SolidColorBrush x:Key="GlyphBrush" Color="#444" />
+            <SolidColorBrush x:Key="NormalBrush" Color="#888" />
+            <SolidColorBrush x:Key="NormalBorderBrush" Color="#888" />
+            <SolidColorBrush x:Key="HorizontalNormalBrush" Color="#FF686868" />
+            <SolidColorBrush x:Key="HorizontalNormalBorderBrush" Color="#888" />
+            <LinearGradientBrush x:Key="ListBoxBackgroundBrush" StartPoint="0,0" EndPoint="1,0.001">
+                <GradientBrush.GradientStops>
+                    <GradientStopCollection>
+                        <GradientStop Color="White" Offset="0.0" />
+                        <GradientStop Color="White" Offset="0.6" />
+                        <GradientStop Color="#DDDDDD" Offset="1.2"/>
+                    </GradientStopCollection>
+                </GradientBrush.GradientStops>
+            </LinearGradientBrush>
+            <LinearGradientBrush x:Key="StandardBrush" StartPoint="0,0" EndPoint="0,1">
+                <GradientBrush.GradientStops>
+                    <GradientStopCollection>
+                        <GradientStop Color="#FFF" Offset="0.0"/>
+                        <GradientStop Color="#CCC" Offset="1.0"/>
+                    </GradientStopCollection>
+                </GradientBrush.GradientStops>
+            </LinearGradientBrush>
+            <LinearGradientBrush x:Key="PressedBrush" StartPoint="0,0" EndPoint="0,1">
+                <GradientBrush.GradientStops>
+                    <GradientStopCollection>
+                        <GradientStop Color="#BBB" Offset="0.0"/>
+                        <GradientStop Color="#EEE" Offset="0.1"/>
+                        <GradientStop Color="#EEE" Offset="0.9"/>
+                        <GradientStop Color="#FFF" Offset="1.0"/>
+                    </GradientStopCollection>
+                </GradientBrush.GradientStops>
+            </LinearGradientBrush>
+
+            <Style x:Key="ScrollBarLineButton" TargetType="{x:Type RepeatButton}">
+                <Setter Property="Visibility" Value="Hidden"/>
+                <Setter Property="SnapsToDevicePixels" Value="True"/>
+                <Setter Property="OverridesDefaultStyle" Value="true"/>
+                <Setter Property="Focusable" Value="false"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type RepeatButton}">
+                            <Border Name="Border" Margin="1" CornerRadius="2" Background="{StaticResource NormalBrush}" BorderBrush="{StaticResource NormalBorderBrush}" BorderThickness="1">
+                                <Path HorizontalAlignment="Center" VerticalAlignment="Center" Fill="{StaticResource GlyphBrush}" Data="{Binding Path=Content, RelativeSource={RelativeSource TemplatedParent}}" />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsPressed" Value="true">
+                                    <Setter TargetName="Border" Property="Background" Value="{StaticResource PressedBrush}" />
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="false">
+                                    <Setter Property="Foreground" Value="{StaticResource DisabledForegroundBrush}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="ScrollBarPageButton" TargetType="{x:Type RepeatButton}">
+                <Setter Property="Visibility" Value="Hidden"/>
+                <Setter Property="SnapsToDevicePixels" Value="True"/>
+                <Setter Property="OverridesDefaultStyle" Value="true"/>
+                <Setter Property="IsTabStop" Value="false"/>
+                <Setter Property="Focusable" Value="false"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type RepeatButton}">
+                            <Border Background="Black" />
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="ScrollBarThumb" TargetType="{x:Type Thumb}">
+                <Setter Property="SnapsToDevicePixels" Value="True"/>
+                <Setter Property="OverridesDefaultStyle" Value="true"/>
+                <Setter Property="IsTabStop" Value="false"/>
+                <Setter Property="Focusable" Value="false"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Thumb}">
+                            <Border CornerRadius="4" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0"  Width="8" Margin="8,0,-2,0"/>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <ControlTemplate x:Key="VerticalScrollBar" TargetType="{x:Type ScrollBar}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition MaxHeight="0"/>
+                        <RowDefinition Height="0.00001*"/>
+                        <RowDefinition MaxHeight="0"/>
+                    </Grid.RowDefinitions>
+                    <Border Grid.RowSpan="3" CornerRadius="2" Background="Transparent" />
+                    <RepeatButton Grid.Row="0" Style="{StaticResource ScrollBarLineButton}" Height="18" Command="ScrollBar.LineUpCommand" Content="M 0 4 L 8 4 L 4 0 Z" />
+                    <Track Name="PART_Track" Grid.Row="1" IsDirectionReversed="true">
+                        <Track.DecreaseRepeatButton>
+                            <RepeatButton Style="{StaticResource ScrollBarPageButton}" Command="ScrollBar.PageUpCommand" />
+                        </Track.DecreaseRepeatButton>
+                        <Track.Thumb>
+                            <Thumb Style="{StaticResource ScrollBarThumb}" Margin="1,0,1,0" Background="{StaticResource HorizontalNormalBrush}" BorderBrush="{StaticResource HorizontalNormalBorderBrush}" />
+                        </Track.Thumb>
+                        <Track.IncreaseRepeatButton>
+                            <RepeatButton Style="{StaticResource ScrollBarPageButton}" Command="ScrollBar.PageDownCommand" />
+                        </Track.IncreaseRepeatButton>
+                    </Track>
+                    <RepeatButton Grid.Row="3" Style="{StaticResource ScrollBarLineButton}" Height="18" Command="ScrollBar.LineDownCommand" Content="M 0 0 L 4 4 L 8 0 Z"/>
+                </Grid>
+            </ControlTemplate>
+            <ControlTemplate x:Key="HorizontalScrollBar" TargetType="{x:Type ScrollBar}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition MaxWidth="18"/>
+                        <ColumnDefinition Width="0.00001*"/>
+                        <ColumnDefinition MaxWidth="18"/>
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.ColumnSpan="3" CornerRadius="2" Background="#F0F0F0"/>
+                    <RepeatButton Grid.Column="0"  Style="{StaticResource ScrollBarLineButton}" Width="18" Command="ScrollBar.LineLeftCommand" Content="M 4 0 L 4 8 L 0 4 Z" />
+                    <Track Name="PART_Track" Grid.Column="1" IsDirectionReversed="False">
+                        <Track.DecreaseRepeatButton>
+                            <RepeatButton Style="{StaticResource ScrollBarPageButton}" Command="ScrollBar.PageLeftCommand" />
+                        </Track.DecreaseRepeatButton>
+                        <Track.Thumb>
+                            <Thumb Style="{StaticResource ScrollBarThumb}" Margin="0,1,0,1" Background="{StaticResource NormalBrush}" BorderBrush="{StaticResource NormalBorderBrush}" />
+                        </Track.Thumb>
+                        <Track.IncreaseRepeatButton>
+                            <RepeatButton Style="{StaticResource ScrollBarPageButton}" Command="ScrollBar.PageRightCommand" />
+                        </Track.IncreaseRepeatButton>
+                    </Track>
+                    <RepeatButton Grid.Column="3" Style="{StaticResource ScrollBarLineButton}" Width="18" Command="ScrollBar.LineRightCommand" Content="M 0 0 L 4 4 L 0 8 Z"/>
+                </Grid>
+            </ControlTemplate>
+            <Style x:Key="{x:Type ScrollBar}" TargetType="{x:Type ScrollBar}">
+                <Setter Property="SnapsToDevicePixels" Value="True"/>
+                <Setter Property="OverridesDefaultStyle" Value="true"/>
+                <Style.Triggers>
+                    <Trigger Property="Orientation" Value="Horizontal">
+                        <Setter Property="Width" Value="Auto"/>
+                        <Setter Property="Height" Value="18" />
+                        <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
+                    </Trigger>
+                    <Trigger Property="Orientation" Value="Vertical">
+                        <Setter Property="Width" Value="18"/>
+                        <Setter Property="Height" Value="Auto" />
+                        <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <Style x:Key="FavsScrollViewer" TargetType="{x:Type ScrollViewer}">
+                <Setter Property="OverridesDefaultStyle" Value="True"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ScrollViewer}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <ScrollContentPresenter Grid.Column="1"/>
+                                <ScrollBar Name="PART_VerticalScrollBar" Value="{TemplateBinding VerticalOffset}" Maximum="{TemplateBinding ScrollableHeight}" ViewportSize="{TemplateBinding ViewportHeight}" Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"/>
+                                <ScrollBar Name="PART_HorizontalScrollBar" Orientation="Horizontal" Grid.Row="1" Grid.Column="1" Value="{TemplateBinding HorizontalOffset}" Maximum="{TemplateBinding ScrollableWidth}" ViewportSize="{TemplateBinding ViewportWidth}" Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}"/>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <DataTemplate x:Key="weatherlists">
+                <StackPanel Margin="5">
+                    <TextBlock Foreground="White" FontSize="16" Text="{Binding Path=Title}" HorizontalAlignment="Center" />
+                    <Image/>
+                    <DockPanel>
+                        <TextBlock Foreground="White" FontSize="16" Text="{Binding Path=MaxTemperature}" HorizontalAlignment="Center" />
+                        <TextBlock Foreground="White" FontSize="16" Text="{Binding Path=MinTemperature}" HorizontalAlignment="Center" />
+                    </DockPanel>
+                    <TextBlock Foreground="White" FontSize="16" Text="{Binding Path=MinTemperature}" HorizontalAlignment="Left" />
+                    <TextBlock Foreground="White" FontSize="16" Text="{Binding Path=MinTemperature}" HorizontalAlignment="Right" />
+                </StackPanel>
+            </DataTemplate>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Window.Background>
+        <ImageBrush Stretch="UniformToFill"  ImageSource="{Binding ActualWeather.TrueBackgroundIcon}"/>
+    </Window.Background>
+    <ScrollViewer  VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <DockPanel Grid.Row="0" Background="#46546E">
+                <TextBlock Text="Forecast" FontSize="25" FontWeight="Bold" Foreground="White" Margin="7, 0, 0, 0"/>
+                <Button DockPanel.Dock="Right" Command="{Binding RefreshCmd}" HorizontalAlignment="Right" FontSize="20" Background="Transparent" Foreground="White" BorderThickness="0" Content="↻"/>
+                <Button DockPanel.Dock="Right" Command="{Binding SearchCmd}" Content="🔎" HorizontalAlignment="Right" FontSize="20" Background="Transparent" Foreground="White" BorderThickness="0" Height="33" VerticalAlignment="Top"/>
+                <TextBox Text="{Binding NameOfCity}" Height="25" HorizontalAlignment="Right" Width="150" />
+            </DockPanel>
+            <StackPanel VerticalAlignment="Center" Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Center">
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" Foreground="White">
+                    <TextBlock.Text>
+                        <MultiBinding Converter="{StaticResource MultiConverter}">
+                            <Binding Path="ActualWeather.Name"/>
+                            <Binding Path="ActualWeather.CountryIndex"/>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+                <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Image Source="{Binding ActualWeather.TrueIcon}" Width="50"/>
+                    <TextBlock Text="{Binding MaxTemperature}" HorizontalAlignment="Center" FontSize="30" Foreground="White"/>
+                    <StackPanel Orientation="Vertical" Width="39">
+                        <Button Content="C" Command="{Binding CelsisCmd}" Margin="20,0, 0, 0" Background="Transparent" BorderThickness="0" Foreground="White"/>
+                        <Button Content="F" Command="{Binding ForengeitСmd}" Margin="20,0, 0, 0" Background="Transparent" BorderThickness="0" Foreground="White"/>
+                    </StackPanel>
+                </WrapPanel>
+                <TextBlock Text="{Binding ActualWeather.WeatherType}" HorizontalAlignment="Center"/>
+                <TextBlock HorizontalAlignment="Center" Text="{Binding ActualWeather.Date, StringFormat=t}" FontSize="14" Foreground="White"/>
+                <WrapPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding  ActualWeather.Feeling ,StringFormat=Feels Like {0} °}" FontSize="12"/>
+                    <TextBlock Margin="10, 0, 0, 0" Text="{Binding ActualWeather.WindSpeed, StringFormat=Wind {0} km/h}" FontSize="12"/>
+                    <TextBlock Margin="10, 0, 0, 0" Text="{Binding ActualWeather.Visibillity, StringFormat=Visibillity {0} km}" FontSize="12"/>
+                </WrapPanel>
+                <WrapPanel Orientation="Horizontal">
+                    <TextBlock Margin="10, 0, 0, 0" Text="{Binding ActualWeather.Pressure, StringFormat=Barometer {0} mb}" FontSize="12"/>
+                    <TextBlock Margin="10, 0, 0, 0" Text="{Binding ActualWeather.Humidy, StringFormat=Humidity {0} %}" FontSize="12"/>
+                    <TextBlock Margin="10, 0, 0, 0" Text="{Binding ActualWeather.DewPoint, StringFormat=Dew Point {0} °}" FontSize="12"/>
+                </WrapPanel>
+            </StackPanel>
+            <WrapPanel HorizontalAlignment="Center" Grid.Row="2" Orientation="Vertical" Margin="48,0,49,0">
+                <WrapPanel>
+                    <TextBlock Text="Daily" Margin="30 0"/>
+                </WrapPanel>
+                <ListBox x:Name="mainlisbox" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Height="auto" HorizontalAlignment="Center"  ItemsSource="{Binding ActualForecastWeather}" Background="Transparent" BorderThickness="0" VerticalAlignment="Top" >
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="SelectionChanged">
+                            <i:InvokeCommandAction Command="{Binding SelectionChangedCmd}" CommandParameter="{Binding ElementName=mainlisbox, Path=SelectedIndex}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="Padding" Value="30 0 30 0" />
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock Foreground="White">
+                                    <TextBlock.Text>
+                                        <MultiBinding Converter="{StaticResource MultiConverter}">
+                                            <Binding Path="Date.DayOfWeek"/>
+                                            <Binding Path="Date.Day"/>
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                                <Image Source="{Binding TrueIcon}" Width="40" HorizontalAlignment="Left" Height="40"/>
+                                <DockPanel Width="40" HorizontalAlignment="Left">
+                                    <TextBlock Foreground="White" Text="{Binding TempMax, StringFormat={}{0}°}"/>
+                                    <TextBlock Foreground="LightGray"  VerticalAlignment="Bottom" HorizontalAlignment="Right" Text="{Binding TempMin, StringFormat={}{0}°}" FontSize="14"/>
+                                </DockPanel>
+                                <TextBlock Foreground="White" Text="{Binding WeatherType}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </WrapPanel>
+            <WrapPanel HorizontalAlignment="Center" Orientation="Vertical" Grid.Row="3">
+                <StackPanel>
+                    <TextBlock Text="3 hours" Margin="20 0"/>
+                    <Separator/>
+                </StackPanel>
+                <ListBox ScrollViewer.HorizontalScrollBarVisibility="Disabled" Height="auto" HorizontalAlignment="Center"  ItemsSource="{Binding ByHours}" Background="Transparent" BorderThickness="0" VerticalAlignment="Top" >
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="Padding" Value="30 0 30 0" />
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <Image Source="{Binding TrueIcon}" Width="70" HorizontalAlignment="Left" Height="30"/>
+                                <TextBlock HorizontalAlignment="Left" Margin="10 0" Foreground="White" Text="{Binding TempMax, StringFormat={}{0}°}"/>
+                                <TextBlock Foreground="White" Text="{Binding WeatherDescription}"/>
+                                <Separator/>
+                                <TextBlock Foreground="White" Text="{Binding Date, StringFormat=HH tt}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </WrapPanel>
+            <WrapPanel Margin="0 20" HorizontalAlignment="Center" Grid.Row="4">
+                <WrapPanel Grid.Row="4" Width="auto" Orientation="Vertical" HorizontalAlignment="Left">
+                    <TextBlock Text="Day"/>
+                    <TextBlock Text="{Binding ActualWeather.WeatherDescription, StringFormat=Today is {0}}"/>
+                    <TextBlock Text="Night"/>
+                    <TextBlock Text="{Binding ActualWeather.WeatherDescription, StringFormat=Tonight will be {0}}"/>
+                </WrapPanel>
+                <WrapPanel Margin="50 0" Grid.Row="4" Orientation="Vertical" HorizontalAlignment="Center">
+                    <TextBlock Text="Sunrise"/>
+                    <DockPanel>
+                        <Image Source="../Elements/Icons/rise.png" Width="20" Height="25"/>
+                        <TextBlock
+                        TextBlock.Text="{Binding ActualWeather.TrueSunRise, StringFormat=t}"/>
+                    </DockPanel>
+                    <TextBlock Text="SunSet"/>
+                    <DockPanel>
+                        <Image Source="../Elements/Icons/set.png" Width="20"/>
+                        <TextBlock Text="{Binding ActualWeather.TrueSunSet, StringFormat=t}"/>
+                    </DockPanel>
+                </WrapPanel>
+
+            </WrapPanel>
+            <WrapPanel Grid.Row="5" HorizontalAlignment="Center" Margin="30">
+                <WrapPanel HorizontalAlignment="Center"  Grid.Row="5">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <TextBlock HorizontalAlignment="Center" Grid.Row="0" Text="Humidity"/>
+                        <cpb:CircularProgressBar
+            Grid.Row="1"
+            Thickness="7" Radius="100"
+            Value="{Binding ActualWeather.Humidy}"
+            HorizontalAlignment="Center"
+            Style="{StaticResource CircularProgressBarStyle}"
+            Background="#69EAFF"
+            Fill="Transparent"
+            Stroke="DarkGray"
+            StrokeThickness="3"
+            Height="100"
+            Width="100"
+            StrokeMode="Middle"
+            EndLineCap="Triangle" />
+                        <TextBlock  Grid.Row="1"
+            Text= "{Binding ActualWeather.Humidy, StringFormat={}{0}%}"
+            FontSize="16"
+            Width="auto"
+            HorizontalAlignment="Center" VerticalAlignment="Center"
+            Background="Transparent"
+            Foreground="White" />
+                    </Grid>
+                </WrapPanel>
+                <WrapPanel Grid.Row="5" HorizontalAlignment="Center" Margin="20 0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="2" Text="Wind Speed" VerticalAlignment="Top" HorizontalAlignment="Center"/>
+                        <cpb:CircularProgressBar
+            Grid.Row="4"
+            Thickness="7" Radius="100"
+            Value="{Binding ActualWeather.WindSpeed}"
+            HorizontalAlignment="Center"
+            Style="{StaticResource CircularProgressBarStyle}"
+            Background="#69EAFF"
+            Fill="Transparent"
+            Stroke="DarkGray"
+            StrokeThickness="3"
+            Height="100"
+            Width="100"
+            StrokeMode="Middle"
+            EndLineCap="Triangle" />
+                        <TextBlock  Grid.Row="3"
+                   Text= "{Binding ActualWeather.WindSpeed, StringFormat={}{0}km/h}"
+                   FontSize="16"
+                 Width="auto"
+                   HorizontalAlignment="Center" VerticalAlignment="Center"
+                   Background="Transparent"
+                   Foreground="White" />
+                    </Grid>
+                </WrapPanel>
+                <WrapPanel Grid.Row="5" HorizontalAlignment="Center" Margin="20 0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="2" Text="UV Index" VerticalAlignment="Top" HorizontalAlignment="Center"/>
+                        <cpb:CircularProgressBar
+            Grid.Row="4"
+            Thickness="7" Radius="100"
+            Value="{Binding ActualWeather.WindSpeed}"
+            HorizontalAlignment="Center"
+            Style="{StaticResource CircularProgressBarStyle}"
+            Background="#69EAFF"
+            Fill="Transparent"
+            Stroke="DarkGray"
+            StrokeThickness="3"
+            FontWeight="Bold"
+            FontSize="50"
+            Height="100"
+            Width="100"
+            StrokeMode="Middle"
+            EndLineCap="Triangle" />
+                        <TextBlock  Grid.Row="3"
+                   Text= "{Binding ActualWeather.UvIndex}"
+                   FontSize="16"
+                 Width="auto"
+                   HorizontalAlignment="Center" VerticalAlignment="Center"
+                   Background="Transparent"
+                   Foreground="White" />
+                    </Grid>
+                </WrapPanel>
+                <WrapPanel Grid.Row="5">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="2" Text="Precipitation" VerticalAlignment="Top" HorizontalAlignment="Center"/>
+                        <cpb:CircularProgressBar
+            Grid.Row="4"
+            Thickness="7" Radius="100"
+            Value="{Binding ActualWeather.CloudsAll}"
+            HorizontalAlignment="Center"
+            Style="{StaticResource CircularProgressBarStyle}"
+            Background="#69EAFF"
+            Fill="Transparent"
+            Stroke="DarkGray"
+            StrokeThickness="3"
+            Height="100"
+            Width="100"
+            StrokeMode="Middle"
+            EndLineCap="Triangle" />
+                        <TextBlock  Grid.Row="3"
+                   Text= "{Binding ActualWeather.CloudsAll, StringFormat={}{0}%}"
+                   FontSize="16"
+                  Width="auto"
+                  Foreground="White"
+                   HorizontalAlignment="Center" VerticalAlignment="Center"
+                   Background="Transparent"/>
+                    </Grid>
+                </WrapPanel>
+            </WrapPanel>
+        </Grid>
+    </ScrollViewer>
+</Window>
